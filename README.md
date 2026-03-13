@@ -2,7 +2,7 @@
 
 MCP server for [Reparatio](https://reparatio.app) — inspect, convert, merge, append, and query local data files directly from your AI assistant.
 
-Supports CSV, TSV, Excel (.xlsx / .xls), ODS, JSON, JSONL, GeoJSON, Parquet, Feather, Arrow, ORC, Avro, SQLite, and gzip-compressed variants.
+Supports CSV, TSV, Excel (.xlsx / .xls), ODS, JSON, JSONL, GeoJSON, Parquet, Feather, Arrow, ORC, Avro, SQLite, YAML, BSON, SRT, VTT, HTML, Markdown, XML, SQL dumps, PDF (text layer), and files compressed with gzip, bzip2, zstd, or zip.
 
 ---
 
@@ -253,7 +253,7 @@ Convert a file from any supported input format to any supported output format.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `input_path` | string | required | Source file path |
-| `target_format` | string | required | Output format: `csv`, `tsv`, `csv.gz`, `csv.bz2`, `csv.zst`, `csv.zip`, `tsv.gz`, `tsv.bz2`, `tsv.zst`, `tsv.zip`, `xlsx`, `ods`, `json`, `json.bz2`, `json.zst`, `json.zip`, `jsonl`, `jsonl.gz`, `jsonl.bz2`, `jsonl.zst`, `jsonl.zip`, `geojson`, `geojson.gz`, `geojson.bz2`, `geojson.zst`, `parquet`, `feather`, `arrow`, `orc`, `avro`, `sqlite` |
+| `target_format` | string | required | Output format: `csv`, `tsv`, `csv.gz`, `csv.bz2`, `csv.zst`, `csv.zip`, `tsv.gz`, `tsv.bz2`, `tsv.zst`, `tsv.zip`, `xlsx`, `ods`, `json`, `json.gz`, `json.bz2`, `json.zst`, `json.zip`, `jsonl`, `jsonl.gz`, `jsonl.bz2`, `jsonl.zst`, `jsonl.zip`, `geojson`, `geojson.gz`, `geojson.bz2`, `geojson.zst`, `geojson.zip`, `yaml`, `bson`, `srt`, `vtt`, `parquet`, `feather`, `arrow`, `orc`, `avro`, `sqlite` |
 | `output_path` | string | auto | Where to save the result |
 | `no_header` | bool | `false` | Treat first row as data |
 | `fix_encoding` | bool | `true` | Repair encoding |
@@ -340,11 +340,12 @@ Supports `SELECT`, `WHERE`, `GROUP BY`, `ORDER BY`, `LIMIT`, aggregations, and m
 | CSV.GZ (gzip) | ✓ | ✓ |
 | CSV.BZ2 (bzip2) | ✓ | ✓ |
 | CSV.ZST (zstd) | ✓ | ✓ |
-| CSV.ZIP | — | ✓ |
+| CSV.ZIP | ✓ | ✓ |
 | TSV.GZ (gzip) | ✓ | ✓ |
 | TSV.BZ2 (bzip2) | ✓ | ✓ |
 | TSV.ZST (zstd) | ✓ | ✓ |
-| TSV.ZIP | — | ✓ |
+| TSV.ZIP | ✓ | ✓ |
+| GZ (any supported format inside) | ✓ | — |
 | ZIP (any supported format inside) | ✓ | — |
 | BZ2 (any supported format inside) | ✓ | — |
 | ZST (any supported format inside) | ✓ | — |
@@ -352,24 +353,35 @@ Supports `SELECT`, `WHERE`, `GROUP BY`, `ORDER BY`, `LIMIT`, aggregations, and m
 | Excel (.xls, legacy) | ✓ | — |
 | ODS | ✓ | ✓ |
 | JSON | ✓ | ✓ |
-| JSON.BZ2 (bzip2) | — | ✓ |
-| JSON.ZST (zstd) | — | ✓ |
-| JSON.ZIP | — | ✓ |
+| JSON.GZ (gzip) | ✓ | ✓ |
+| JSON.BZ2 (bzip2) | ✓ | ✓ |
+| JSON.ZST (zstd) | ✓ | ✓ |
+| JSON.ZIP | ✓ | ✓ |
 | JSON Lines | ✓ | ✓ |
-| JSON Lines GZ (gzip) | — | ✓ |
-| JSON Lines BZ2 (bzip2) | — | ✓ |
-| JSON Lines ZST (zstd) | — | ✓ |
-| JSON Lines ZIP | — | ✓ |
+| JSON Lines GZ (gzip) | ✓ | ✓ |
+| JSON Lines BZ2 (bzip2) | ✓ | ✓ |
+| JSON Lines ZST (zstd) | ✓ | ✓ |
+| JSON Lines ZIP | ✓ | ✓ |
 | GeoJSON | ✓ | ✓ |
-| GeoJSON.GZ (gzip) | — | ✓ |
-| GeoJSON.BZ2 (bzip2) | — | ✓ |
-| GeoJSON.ZST (zstd) | — | ✓ |
+| GeoJSON.GZ (gzip) | ✓ | ✓ |
+| GeoJSON.BZ2 (bzip2) | ✓ | ✓ |
+| GeoJSON.ZST (zstd) | ✓ | ✓ |
+| GeoJSON.ZIP | ✓ | ✓ |
 | Parquet | ✓ | ✓ |
 | Feather | ✓ | ✓ |
 | Arrow | ✓ | ✓ |
 | ORC | ✓ | ✓ |
 | Avro | ✓ | ✓ |
 | SQLite | ✓ | ✓ |
+| YAML | ✓ | ✓ |
+| BSON | ✓ | ✓ |
+| SRT (subtitles) | ✓ | ✓ |
+| VTT (subtitles) | ✓ | ✓ |
+| HTML / HTM | ✓ | — |
+| Markdown | ✓ | — |
+| XML | ✓ | — |
+| SQL dump | ✓ | — |
+| PDF (text layer) | ✓ | — |
 
 ---
 

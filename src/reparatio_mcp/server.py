@@ -95,8 +95,9 @@ async def list_tools() -> list[Tool]:
                 "Inspect a local file: detect encoding, count rows, list columns with "
                 "data types, null counts, and unique counts, and return a preview. "
                 "Supports CSV, TSV, Excel (.xlsx/.xls), ODS, JSON, JSONL, GeoJSON, "
-                "Parquet, Feather, Arrow, ORC, Avro, SQLite, and gzip-compressed variants. "
-                "No API key required."
+                "Parquet, Feather, Arrow, ORC, Avro, SQLite, YAML, BSON, SRT, VTT, "
+                "HTML, Markdown, XML, SQL dumps, PDF (text layer), and files compressed "
+                "with gzip, bzip2, zstd, or zip. No API key required."
             ),
             inputSchema={
                 "type": "object",
@@ -123,7 +124,7 @@ async def list_tools() -> list[Tool]:
                 "type": "object",
                 "properties": {
                     "input_path":     {"type": "string", "description": "Local path to the source file"},
-                    "target_format":  {"type": "string", "description": "Output format: csv, tsv, csv.gz, csv.bz2, csv.zst, csv.zip, tsv.gz, tsv.bz2, tsv.zst, tsv.zip, xlsx, ods, json, json.bz2, json.zst, json.zip, jsonl, jsonl.gz, jsonl.bz2, jsonl.zst, jsonl.zip, geojson, geojson.gz, geojson.bz2, geojson.zst, parquet, feather, arrow, orc, avro, sqlite"},
+                    "target_format":  {"type": "string", "description": "Output format: csv, tsv, csv.gz, csv.bz2, csv.zst, csv.zip, tsv.gz, tsv.bz2, tsv.zst, tsv.zip, xlsx, ods, json, json.gz, json.bz2, json.zst, json.zip, jsonl, jsonl.gz, jsonl.bz2, jsonl.zst, jsonl.zip, geojson, geojson.gz, geojson.bz2, geojson.zst, geojson.zip, yaml, bson, srt, vtt, parquet, feather, arrow, orc, avro, sqlite"},
                     "output_path":    {"type": "string", "description": "Output file path (default: same directory as input, extension changed)"},
                     "no_header":      {"type": "boolean", "default": False},
                     "fix_encoding":   {"type": "boolean", "default": True},
