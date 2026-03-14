@@ -67,8 +67,8 @@ def _raise_api_error(resp: httpx.Response) -> None:
         detail = resp.text or resp.reason_phrase
     messages = {
         401: "No API key set. Add REPARATIO_API_KEY to your environment.",
-        403: "Insufficient plan. A Monthly plan is required for this operation.",
-        413: "File too large (max 1 GB).",
+        403: "Insufficient plan. A Professional plan is required for this operation.",
+        413: "File too large (max 2 GB).",
         422: f"Parse failure: {detail}",
     }
     raise RuntimeError(messages.get(resp.status_code, f"API error {resp.status_code}: {detail}"))
@@ -118,7 +118,7 @@ async def list_tools() -> list[Tool]:
                 "Convert a local file from any supported input format to any supported "
                 "output format. Optionally select or rename columns, deduplicate rows, "
                 "or sample a subset. Saves the result to disk and returns the output path. "
-                "Requires a Monthly plan API key."
+                "Requires a Professional plan API key."
             ),
             inputSchema={
                 "type": "object",
@@ -135,7 +135,8 @@ async def list_tools() -> list[Tool]:
                     "deduplicate":    {"type": "boolean", "default": False, "description": "Remove duplicate rows"},
                     "sample_n":       {"type": "integer", "description": "Output a random sample of N rows"},
                     "sample_frac":    {"type": "number",  "description": "Output a random fraction, e.g. 0.1 for 10%"},
-                    "geometry_column":{"type": "string",  "default": "geometry", "description": "WKT geometry column for GeoJSON output"},
+                    "geometry_column":    {"type": "string",  "default": "geometry", "description": "WKT geometry column for GeoJSON output"},
+                    "encoding_override":  {"type": "string",  "default": "", "description": "Force a specific encoding instead of auto-detecting, e.g. cp037 (EBCDIC US), cp500 (EBCDIC International), cp1026 (EBCDIC Turkish), cp1140 (EBCDIC US+Euro), or any Python codec name. Leave blank for auto-detection."},
                 },
                 "required": ["input_path", "target_format"],
             },
@@ -145,7 +146,7 @@ async def list_tools() -> list[Tool]:
             description=(
                 "Merge two local files using a join operation or append (row-stacking). "
                 "Saves the result to disk and returns the output path. "
-                "Requires a Monthly plan API key."
+                "Requires a Professional plan API key."
             ),
             inputSchema={
                 "type": "object",
@@ -169,7 +170,7 @@ async def list_tools() -> list[Tool]:
             description=(
                 "Stack rows from two or more local files vertically. Columns missing from "
                 "some files are filled with null. Saves the result to disk and returns the "
-                "output path. Requires a Monthly plan API key."
+                "output path. Requires a Professional plan API key."
             ),
             inputSchema={
                 "type": "object",
@@ -189,7 +190,7 @@ async def list_tools() -> list[Tool]:
                 "Run a SQL query against a local file. The file is loaded as a table named "
                 "'data'. Supports SELECT, WHERE, GROUP BY, ORDER BY, LIMIT, aggregations, "
                 "and most scalar functions. Saves the result to disk and returns the output path. "
-                "Requires a Monthly plan API key."
+                "Requires a Professional plan API key."
             ),
             inputSchema={
                 "type": "object",
@@ -298,8 +299,9 @@ async def _convert(args: dict) -> list[TextContent]:
         "deduplicate_on":  "[]",
         "geometry_column": args.get("geometry_column", "geometry"),
     }
-    if args.get("sample_n"):    data["sample_n"]    = str(args["sample_n"])
-    if args.get("sample_frac"): data["sample_frac"] = str(args["sample_frac"])
+    if args.get("sample_n"):         data["sample_n"]         = str(args["sample_n"])
+    if args.get("sample_frac"):      data["sample_frac"]      = str(args["sample_frac"])
+    if args.get("encoding_override"): data["encoding_override"] = args["encoding_override"]
 
     async with httpx.AsyncClient(timeout=300) as client:
         resp = await client.post(
@@ -447,7 +449,7 @@ async def main() -> None:
     if not API_KEY:
         print(
             "reparatio-mcp: REPARATIO_API_KEY is not set. "
-            "inspect_file works without a key; all other tools require a Monthly plan key.",
+            "inspect_file works without a key; all other tools require a Professional plan key.",
             file=sys.stderr,
         )
     async with stdio_server() as (read_stream, write_stream):

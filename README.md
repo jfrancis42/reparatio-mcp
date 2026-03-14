@@ -1,8 +1,12 @@
 # reparatio-mcp
 
+> **Alpha software.** Interfaces, tool names, and behaviour may change without notice between versions.
+
 MCP server for [Reparatio](https://reparatio.app) — inspect, convert, merge, append, and query local data files directly from your AI assistant.
 
 Supports CSV, TSV, Excel (.xlsx / .xls), ODS, JSON, JSONL, GeoJSON, Parquet, Feather, Arrow, ORC, Avro, SQLite, YAML, BSON, SRT, VTT, HTML, Markdown, XML, SQL dumps, PDF (text layer), and files compressed with gzip, bzip2, zstd, or zip.
+
+**See also:** [reparatio-cli](https://github.com/jfrancis42/reparatio-cli) (command-line tool) · [reparatio-sdk](https://github.com/jfrancis42/reparatio-sdk) (Python SDK)
 
 ---
 
@@ -16,7 +20,8 @@ The MCP server runs locally on your machine. When your AI assistant calls a tool
 
 - **Python 3.11 or later** — check with `python3 --version`
 - **A Reparatio API key** — required for convert, merge, append, and query. `inspect_file` works without a key.
-  - Get a key at [reparatio.app](https://reparatio.app) (Monthly plan)
+  - Get a key at [reparatio.app](https://reparatio.app) (Professional plan — $79/mo)
+  - The MCP server requires the **Professional plan**; Standard ($29/mo) does not include API or MCP access
   - Keys are prefixed with `rp_`
 
 `uvx` (from [uv](https://github.com/astral-sh/uv)) is the recommended way to run the server — no install step required. Install uv with:
@@ -248,7 +253,7 @@ Detect encoding, count rows, list column types and statistics, and return a data
 ### `convert_file`
 
 Convert a file from any supported input format to any supported output format.
-**Monthly plan required.**
+**Professional plan required ($79/mo).**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
@@ -265,13 +270,14 @@ Convert a file from any supported input format to any supported output format.
 | `sample_n` | int | — | Random sample of N rows |
 | `sample_frac` | float | — | Random sample fraction (e.g. `0.1` for 10%) |
 | `geometry_column` | string | `"geometry"` | WKT geometry column for GeoJSON output |
+| `encoding_override` | string | `""` | Force a specific encoding instead of auto-detecting. Pass any Python codec name, e.g. `cp037` (EBCDIC US), `cp500` (EBCDIC International), `cp1026` (EBCDIC Turkish), `cp1140` (EBCDIC US+Euro). Leave blank for auto-detection. |
 
 ---
 
 ### `merge_files`
 
 Merge two files using a SQL-style join or append (row-stacking).
-**Monthly plan required.**
+**Professional plan required ($79/mo).**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
@@ -299,7 +305,7 @@ Merge two files using a SQL-style join or append (row-stacking).
 ### `append_files`
 
 Stack rows from two or more files vertically. Handles column mismatches gracefully.
-**Monthly plan required.**
+**Professional plan required ($79/mo).**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
@@ -314,7 +320,7 @@ Stack rows from two or more files vertically. Handles column mismatches graceful
 ### `query_file`
 
 Run a SQL query against a file. The file is loaded as a table named `data`.
-**Monthly plan required.**
+**Professional plan required ($79/mo).**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
@@ -408,6 +414,9 @@ sorted descending, as a JSON file.
 
 I have ~/data/legacy.csv from an old Windows system — fix the encoding
 and convert it to Excel.
+
+Convert ~/data/mainframe.dat (EBCDIC cp037 encoding) to CSV.
+Use encoding_override: cp037.
 ```
 
 ---
@@ -425,9 +434,17 @@ If you don't specify `output_path`, the server picks a sensible default in the s
 
 ---
 
-## Free tier
+## Pricing
 
-`inspect_file` requires no API key. All other tools work without a key but output is truncated to 50 rows. The tool will tell you when truncation occurs. A Monthly plan at [reparatio.app](https://reparatio.app) removes all row limits.
+| Plan | Price | MCP access |
+|---|---|---|
+| Free (anonymous) | $0 | No (inspect_file only, 100-row limit) |
+| Free (registered) | $0 | No (inspect_file only, 250-row limit) |
+| Standard | $29/month | No |
+| Professional | $79/month | Yes — full access, 2 GB files |
+| Credits | $10 = 25 conversions | No |
+
+**The Professional plan is required for MCP tool access** (convert, merge, append, query). `inspect_file` is free for all users but output is truncated for non-Professional accounts. A Professional plan removes all row limits and enables all tools.
 
 ---
 
@@ -454,7 +471,7 @@ The key is missing from the `env` block in your client config. Check spelling �
 Install uv: `curl -LsSf https://astral.sh/uv/install.sh | sh`, then restart your terminal and your AI client.
 
 **"Insufficient plan"**
-The tool you called requires a Monthly plan key. `inspect_file` is always free.
+The tool you called requires a Professional plan key ($79/mo). `inspect_file` is always free.
 
 **"File not found"**
 Use an absolute path (starting with `/` or `~`). Relative paths are resolved from the server process's working directory, which may not be what you expect.
