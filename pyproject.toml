@@ -6,6 +6,19 @@ build-backend = "hatchling.build"
 name = "reparatio-mcp"
 version = "0.1.0"
 description = "MCP server for Reparatio — file conversion, merging, and SQL queries"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Ordo Artificum LLC", email = "support@reparatio.app" }]
+keywords = ["reparatio", "mcp", "csv", "parquet", "excel", "data", "conversion", "etl"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
 requires-python = ">=3.11"
 dependencies = [
     "mcp>=1.0.0",
@@ -14,6 +27,8 @@ dependencies = [
 
 [project.urls]
 Homepage   = "https://reparatio.app"
+Repository = "https://github.com/jfrancis42/reparatio-mcp"
+"Bug Tracker" = "https://github.com/jfrancis42/reparatio-mcp/issues"
 
 [project.scripts]
 reparatio-mcp = "reparatio_mcp.server:cli"
