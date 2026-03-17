@@ -30,8 +30,15 @@ Homepage   = "https://reparatio.app"
 Repository = "https://github.com/jfrancis42/reparatio-mcp"
 "Bug Tracker" = "https://github.com/jfrancis42/reparatio-mcp/issues"
 
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-asyncio>=0.23"]
+
 [project.scripts]
 reparatio-mcp = "reparatio_mcp.server:cli"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/reparatio_mcp"]
